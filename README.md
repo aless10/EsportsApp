@@ -1,4 +1,6 @@
+# Esports Challenge
 
+![Run application tests](https://github.com/aless10/EsportsApp/workflows/Run%20application%20tests/badge.svg)
 
 ## TOC
 
