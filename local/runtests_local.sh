@@ -1,4 +1,4 @@
 #!/bin/bash
 
 
-cd esports && pytest
+cd esports_app/esports && pytest

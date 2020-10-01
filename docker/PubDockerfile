@@ -1,0 +1,20 @@
+FROM python:3.8 as base
+COPY publisher/requirements_publisher.txt /
+RUN pip wheel --no-cache-dir --no-deps --wheel-dir /wheels -r requirements_publisher.txt
+FROM python:3.8
+COPY --from=base /wheels /wheels
+COPY --from=base requirements_publisher.txt .
+
+ENV PYTHONBUFFERED=1
+
+RUN pip install --no-cache /wheels/*
+WORKDIR /app
+COPY ./publisher /app
+
+RUN mv ../requirements_publisher.txt .
+RUN useradd publisher_dev
+RUN chown -R publisher_dev:publisher_dev /app
+
+USER publisher_dev
+
+CMD ["python", "publisher.py"]

@@ -9,9 +9,9 @@ ENV PYTHONBUFFERED=1
 
 RUN pip install --no-cache /wheels/*
 WORKDIR /app
-COPY ./esports /app/esports
-COPY ./scripts /app/scripts
-COPY ./swagger_template /app/swagger_template
+COPY ./esports_app/esports /app/esports
+COPY ./esports_app/scripts /app/scripts
+COPY ./esports_app/swagger_template /app/swagger_template
 COPY .env /app
 
 RUN mv ../requirements.txt .
