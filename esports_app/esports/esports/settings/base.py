@@ -125,5 +125,24 @@ SWAGGER_SETTINGS = {
 }
 
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'file': {
+            'level': 'DEBUG',
+            'class': 'logging.FileHandler',
+            'filename': os.path.join(BASE_DIR, "..", "..", "logs", "debug.log")
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['file'],
+            'level': 'DEBUG',
+            'propagate': True,
+        },
+    },
+}
+
 HOST = os.environ.get("RABBIT_CONTAINER", "localhost")
 EXCHANGE = os.environ.get("EXCHANGE", "basic_exchange")

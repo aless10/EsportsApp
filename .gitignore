@@ -131,3 +131,4 @@ dmypy.json
 
 .idea
 esports_app/static/
+debug.log
