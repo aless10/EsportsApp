@@ -1,6 +1,10 @@
 import json
 import logging
+import time
+from functools import wraps
+
 import pika
+from pika.exceptions import AMQPConnectionError
 from django.core.management import BaseCommand
 
 from django.conf import settings
@@ -9,6 +13,27 @@ from api.models import Event, Tournament, Team, Score, Match
 
 
 logger = logging.getLogger(__name__)
+
+
+def retry(exceptions, tries=3, delay=3):
+    def wrapper(f):
+        @wraps(f)
+        def wrapped(*args, **kwargs):
+            raised_exception = None
+            decr_tries = tries
+            while decr_tries > 0:
+                try:
+                    return f(*args, **kwargs)
+                except exceptions as e:
+                    raised_exception = e
+                    logger.warning(f"{e}, Retrying in {delay} seconds...")
+                    time.sleep(delay)
+                    decr_tries -= 1
+            raise raised_exception
+
+        return wrapped
+
+    return wrapper
 
 
 def callback(ch, method, properties, body):
@@ -62,6 +87,7 @@ def callback(ch, method, properties, body):
 class Command(BaseCommand):
     help = 'Consume messages from queue and save to database'
 
+    @retry((AMQPConnectionError,), tries=5, delay=3)
     def handle(self, *args, **options):
         connection = pika.BlockingConnection(
             pika.ConnectionParameters(host=settings.HOST))

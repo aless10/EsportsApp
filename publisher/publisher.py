@@ -1,11 +1,13 @@
 import logging
 import json
 import os
+import sys
 import time
 
 import pika
 from pika import BlockingConnection
 from pika.adapters.blocking_connection import BlockingChannel
+from pika.exceptions import AMQPConnectionError
 
 HOST = os.environ.get("RABBIT_CONTAINER", "localhost")
 EXCHANGE = os.environ.get("EXCHANGE", "basic_exchange")
@@ -24,10 +26,21 @@ def create_channel(pika_connection: BlockingConnection) -> BlockingChannel:
 
 
 if __name__ == '__main__':
-    time.sleep(10)
-    logging.info("Creating a connection with %s", HOST)
-    connection = create_connection(host=HOST)
-    channel = create_channel(connection)
+    logger.info("Creating a connection with %s", HOST)
+    connected = False
+    tries = 0
+    while not connected and tries < 5:
+        try:
+            connection = create_connection(host=HOST)
+            channel = create_channel(connection)
+            connected = True
+        except AMQPConnectionError:
+            logger.warning("Could not connect to rabbit. Try %s of 5", tries)
+            tries += 1
+            time.sleep(5)
+    if not connected:
+        sys.exit(1)
+
     channel.exchange_declare(exchange=EXCHANGE, exchange_type='fanout')
     data_dir = os.path.join(
         os.path.dirname(

@@ -6,7 +6,9 @@
 
 * [Version](#version)
 * [Description](#description)
+* [Where I struggled more](#where-i-struggled-more)
 * [How to run](#how-to-run)
+
 * [Miscellanea](#miscellanea)
 
 ## Version
@@ -53,9 +55,21 @@ Preferred usage of Python packages:
 - django-elasticsearch-dsl-drf
 
 
+## Where I struggled more
+
+I want to list the things that I thought I could do more easily:
+
+* connecting the publisher service: I thought this should be an easy task, but I did not figure it out how to let this work;
+
+This has blocked me a lot since I spent most of the time doing this. So I basically failed in creating the first block of the whole system.
+Then I tried to set up the api but I did not find the time to test them.
+
 ## How to run
 
+![Sketch](arch_sketch.png?raw=&sanitize=true)
+
 The application runs inside some docker containers. The django application is served via gunicorn with a nginx server in front of it.
+It should be reachable at ``localhost:80``
 
 After cloning the repo, you can run in the terminal:
     
@@ -67,7 +81,8 @@ This should start the containers with the settings found in the ``.env`` file.
 You can find a sample in the repo at `.env.example`.
 In the ``scripts`` folder there are some script to run:
     
-    ```./scripts/runtests_local.sh``` to run the tests in the django application (if any)
+    ./scripts/runtests_local.sh to run the tests in the django application (if any)
+    
 
 ## Miscellanea
 
