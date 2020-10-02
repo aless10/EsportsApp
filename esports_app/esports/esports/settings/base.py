@@ -144,5 +144,5 @@ LOGGING = {
     },
 }
 
-HOST = os.environ.get("RABBIT_CONTAINER", "localhost")
+RABBIT_HOST = os.environ.get("RABBIT_CONTAINER", "localhost")
 EXCHANGE = os.environ.get("EXCHANGE", "basic_exchange")
