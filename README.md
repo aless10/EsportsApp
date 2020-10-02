@@ -61,8 +61,7 @@ I want to list the things that I thought I could do more easily:
 
 * connecting the publisher service: I thought this should be an easy task, but I did not figure it out how to let this work;
 
-This has blocked me a lot since I spent most of the time doing this. So I basically failed in creating the first block of the whole system.
-Then I tried to set up the api but I did not find the time to test them.
+This has blocked me a lot since I spent most of the time doing this. Then I think that it was just a problem of calling the rabbitmq host in the correct way. 
 
 ## How to run
 
