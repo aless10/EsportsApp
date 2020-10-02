@@ -1,5 +1,4 @@
 import logging
-import json
 import os
 import sys
 import time
@@ -51,10 +50,10 @@ if __name__ == '__main__':
     for message_file in messages_file:
         logging.info("Publishing data from message %s", message_file)
         abs_x = os.path.join(data_dir, message_file)
-        with open(abs_x, "r") as message:
+        with open(abs_x, "rb") as message:
             channel.basic_publish(
                 exchange=EXCHANGE,
                 routing_key='',
-                body=json.dumps(message.read())
+                body=message.read()
             )
     connection.close()

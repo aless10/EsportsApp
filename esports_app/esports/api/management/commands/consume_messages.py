@@ -41,14 +41,9 @@ def retry(exceptions, tries=3, delay=3):
 
 
 def callback(ch, method, properties, body):
-    print(body)
     body = body.decode()
-    print(body)
     logger.info('Running the callback with body %s', body)
-    print(type(body))
     j_body = json.loads(body)
-    print(type(j_body))
-    print(j_body)
     data = j_body["data"]
     match_id = int(data["id"])
     state = int(data["state"])
@@ -57,19 +52,21 @@ def callback(ch, method, properties, body):
         source=j_body["source"],
         data=data
     )
-    tournament = Tournament.objects.get_or_create(  # pylint:disable=E1101
-        id=int(data["tournament"]["id"]),
-        name=int(data["tournament"]["name"])
+    tournament_name = data["tournament"]["name"] \
+        if isinstance(data["tournament"], dict) \
+        else data["tournament"]
+    tournament, _ = Tournament.objects.get_or_create(  # pylint:disable=E1101
+        name=tournament_name
     )
     for team in data["teams"]:
         Team.objects.get_or_create(  # pylint:disable=E1101
             id=int(team["id"]),
-            name=int(team["name"])
+            name=team["name"]
         )
 
     scores = []
     for score in data["scores"]:
-        s = Score.objects.get_or_create(  # pylint:disable=E1101
+        s, _ = Score.objects.get_or_create(  # pylint:disable=E1101
             match_id=match_id,
             state=state,
             date_start=date_start,
@@ -86,7 +83,7 @@ def callback(ch, method, properties, body):
         state=state,
         date_start=date_start,
         tournament=tournament,
-        best_of=data["best_of"],
+        best_of=data["bestof"],
         url=data["url"],
         title=data["title"],
         a_team_score=scores[0],

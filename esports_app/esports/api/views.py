@@ -1,3 +1,4 @@
+from django.http import HttpResponseNotFound
 from rest_framework import viewsets
 from django_filters import rest_framework as filters
 from rest_framework.response import Response
@@ -29,6 +30,8 @@ class MatchView(viewsets.ViewSet):
         return Response(serialized.data)
 
     def retrieve(self, request, pk=None):
-        queryset = self.queryset.get_or_404(id=pk)
-        serialized = self.serializer_class(queryset)
+        match = Match.objects.get(id=pk)  # pylint:disable=E1101
+        if match is None:
+            return HttpResponseNotFound(f"No match matching id={pk}")
+        serialized = self.serializer_class(match)
         return Response(serialized.data)
