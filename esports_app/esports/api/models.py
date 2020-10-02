@@ -16,19 +16,28 @@ class Match(models.Model):
     match_id = models.IntegerField()
     state = models.IntegerField()
     title = models.CharField(max_length=255)
-    a_team_score = models.ForeignKey("Score", on_delete=models.SET_NULL)
-    b_team_score = models.ForeignKey("Score", on_delete=models.SET_NULL)
+    a_team_score = models.ForeignKey(
+        "Score",
+        on_delete=models.CASCADE,
+        related_name="a_team"
+    )
+    b_team_score = models.ForeignKey(
+        "Score",
+        on_delete=models.CASCADE,
+        related_name="b_team")
     best_of = models.IntegerField(null=True)
     date_start = models.DateTimeField()
     url = models.CharField(max_length=255)
-    tournament = models.ForeignKey("Tournament", on_delete=models.SET_NULL)
+    tournament = models.ForeignKey("Tournament", on_delete=models.CASCADE)
 
 
 class Score(models.Model):
     match_id = models.IntegerField(db_index=True)
-    team = models.ForeignKey("Team", on_delete=models.SET_NULL)
+    state = models.IntegerField()
+    team = models.ForeignKey("Team", on_delete=models.CASCADE)
     score = models.IntegerField(null=True)
     is_winner = models.IntegerField(null=True)
+    date_start = models.DateTimeField()
 
 
 class Team(models.Model):

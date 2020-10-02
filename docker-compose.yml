@@ -53,10 +53,11 @@ services:
     env_file:
       - .env
     volumes:
-      - ./publisher:/app/publisher
+      - ./publisher:/app/
       - ./data:/app/data
     depends_on:
       - rabbitmq
+      - app
 
   rabbitmq:
     image: rabbitmq
