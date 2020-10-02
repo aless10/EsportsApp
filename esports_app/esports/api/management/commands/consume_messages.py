@@ -1,5 +1,5 @@
 import json
-
+import logging
 import pika
 from django.core.management import BaseCommand
 
@@ -8,7 +8,11 @@ from django.conf import settings
 from api.models import Event, Tournament, Team, Score, Match
 
 
+logger = logging.getLogger(__name__)
+
+
 def callback(ch, method, properties, body):
+    logger.info('Running the callback with body %s', body)
     j_body = json.loads(body)
     data = j_body["data"]
     match_id = int(data["id"])
@@ -72,7 +76,7 @@ class Command(BaseCommand):
 
         channel.queue_bind(exchange=settings.EXCHANGE, queue=queue_name)
 
-        print('[*] Waiting for events')
+        logger.info('The consumer is waiting for events')
 
         channel.basic_consume(
             queue=queue_name, on_message_callback=callback, auto_ack=True)
