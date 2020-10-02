@@ -55,18 +55,19 @@ Preferred usage of Python packages:
 
 ## How to run
 
-The application runs inside a docker container. The django application is served via gunicorn with a nginx server in front of it.
+The application runs inside some docker containers. The django application is served via gunicorn with a nginx server in front of it.
 
 After cloning the repo, you can run in the terminal:
     
-    ./local/build.sh (it builds the app container)
-    ./local/start.sh (it runs the docker-compose command)
+    ./scripts/start.sh (it runs the docker-compose command in detached mode)
+    or
+    docker-compose up (which is basically what the above command does)
 
 This should start the containers with the settings found in the ``.env`` file.
-You can find a sample in the repo.
-In the ``local`` folder there are some script to run:
+You can find a sample in the repo at `.env.example`.
+In the ``scripts`` folder there are some script to run:
     
-    ```./local/runtests.sh``` to run the tests
+    ```./scripts/runtests_local.sh``` to run the tests in the django application (if any)
 
 ## Miscellanea
 
