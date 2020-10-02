@@ -33,11 +33,11 @@ class Match(models.Model):
 
 class Score(models.Model):
     match_id = models.IntegerField(db_index=True)
-    state = models.IntegerField()
+    state = models.IntegerField(null=True)
     team = models.ForeignKey("Team", on_delete=models.CASCADE)
     score = models.IntegerField(null=True)
     is_winner = models.IntegerField(null=True)
-    date_start = models.DateTimeField()
+    date_start = models.DateTimeField(auto_now=True)
 
 
 class Team(models.Model):
