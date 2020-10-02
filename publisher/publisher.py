@@ -1,3 +1,4 @@
+import json
 import os
 import time
 
@@ -20,19 +21,21 @@ def create_channel(pika_connection: BlockingConnection) -> BlockingChannel:
 
 if __name__ == '__main__':
     time.sleep(10)
+    print(HOST)
     connection = create_connection(host=HOST)
     channel = create_channel(connection)
     channel.exchange_declare(exchange=EXCHANGE, exchange_type='fanout')
-    data_dir = os.listdir(
-            os.path.join(
-                os.path.dirname(
-                    os.path.abspath(__file__)), "data")
-        )
-    for x in data_dir:
-        with open(x, "rb") as message:
+    data_dir = os.path.join(
+        os.path.dirname(
+            os.path.abspath(__file__)
+        ), "data")
+    messages_file = os.listdir(data_dir)
+    for x in messages_file:
+        abs_x = os.path.join(data_dir, x)
+        with open(abs_x, "r") as message:
             channel.basic_publish(
                 exchange=EXCHANGE,
                 routing_key='',
-                body=message
+                body=json.dumps(message.read())
             )
     connection.close()

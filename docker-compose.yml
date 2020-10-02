@@ -57,6 +57,7 @@ services:
       - ./data:/app/data
     depends_on:
       - rabbitmq
+      - app
 
   rabbitmq:
     image: rabbitmq
