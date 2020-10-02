@@ -26,7 +26,7 @@ if __name__ == '__main__':
     data_dir = os.listdir(
             os.path.join(
                 os.path.dirname(
-                    os.path.abspath(__file__)), "..", "data")
+                    os.path.abspath(__file__)), "data")
         )
     for x in data_dir:
         with open(x, "rb") as message:
