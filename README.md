@@ -66,7 +66,7 @@ Then I tried to set up the api but I did not find the time to test them.
 
 ## How to run
 
-![Sketch](arch_sketch.jpg?raw=true)
+![Sketch](arch_sketch.png?raw=&sanitize=true)
 
 The application runs inside some docker containers. The django application is served via gunicorn with a nginx server in front of it.
 It should be reachable at ``localhost:80``
