@@ -2,4 +2,4 @@ from . import __version__
 
 
 def test_version():
-    assert __version__ == "0.0.1.dev"
+    assert __version__ == "0.0.1"
