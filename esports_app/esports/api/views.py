@@ -4,8 +4,17 @@ from django_filters import rest_framework as filters
 from rest_framework.response import Response
 
 from .filters import MatchFilter
-from .models import Match
-from .serializers import MatchSerializer
+from .models import Match, Event
+from .serializers import MatchSerializer, EventSerializer
+
+
+class EventView(viewsets.ViewSet):
+    queryset = Event.objects.all()  # pylint:disable=E1101
+    serializer_class = EventSerializer
+
+    def list(self, request):
+        serialized = self.serializer_class(self.queryset, many=True)
+        return Response(serialized.data)
 
 
 class MatchView(viewsets.ViewSet):

@@ -13,7 +13,7 @@ class Event(models.Model):
 
 
 class Match(models.Model):
-    match_id = models.IntegerField()
+    match_id = models.CharField(max_length=255)
     state = models.IntegerField()
     title = models.CharField(max_length=255)
     a_team_score = models.ForeignKey(
@@ -32,7 +32,7 @@ class Match(models.Model):
 
 
 class Score(models.Model):
-    match_id = models.IntegerField(db_index=True)
+    match_id = models.CharField(max_length=255, db_index=True)
     state = models.IntegerField(null=True)
     team = models.ForeignKey("Team", on_delete=models.CASCADE)
     score = models.IntegerField(null=True)

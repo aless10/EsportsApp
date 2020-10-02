@@ -1,6 +1,6 @@
 from rest_framework import serializers
 
-from .models import Match, Team, Tournament, Score
+from .models import Match, Team, Tournament, Score, Event
 
 
 class MatchSerializer(serializers.ModelSerializer):
@@ -24,4 +24,10 @@ class TournamentSerializer(serializers.ModelSerializer):
 class ScoreSerializer(serializers.ModelSerializer):
     class Meta:
         model = Score
+        fields = '__all__'
+
+
+class EventSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Event
         fields = '__all__'

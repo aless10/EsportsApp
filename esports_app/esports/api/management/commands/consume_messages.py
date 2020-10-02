@@ -45,9 +45,10 @@ def callback(ch, method, properties, body):
     logger.info('Running the callback with body %s', body)
     j_body = json.loads(body)
     data = j_body["data"]
-    match_id = int(data["id"])
+    match_id = data["id"]
     state = int(data["state"])
     date_start = data["date_start_text"]
+    # FIXME: this operation should be atomic. We should use a session instead
     Event.objects.create(  # pylint:disable=E1101
         source=j_body["source"],
         data=data
@@ -59,10 +60,12 @@ def callback(ch, method, properties, body):
         name=tournament_name
     )
     for team in data["teams"]:
-        Team.objects.get_or_create(  # pylint:disable=E1101
-            id=int(team["id"]),
-            name=team["name"]
+        obj_team, created = Team.objects.get_or_create(  # pylint:disable=E1101
+            id=int(team["id"])
         )
+        if not created and obj_team.name != team["name"]:
+            obj_team.name = team["name"]
+            obj_team.save()
 
     scores = []
     for score in data["scores"]:
