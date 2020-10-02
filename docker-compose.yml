@@ -36,6 +36,7 @@ services:
     volumes:
       - ./esports_app/esports:/app/esports
       - ./esports_app/static:/app/static
+      - ./esports_app/logs:/app/logs
       - ./data:/app/data
     ports:
       - '8000:8000'

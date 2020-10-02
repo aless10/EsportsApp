@@ -66,6 +66,8 @@ Then I tried to set up the api but I did not find the time to test them.
 
 ## How to run
 
+![Sketch](arch_sketch.jpg?raw=true)
+
 The application runs inside some docker containers. The django application is served via gunicorn with a nginx server in front of it.
 It should be reachable at ``localhost:80``
 
@@ -80,6 +82,7 @@ You can find a sample in the repo at `.env.example`.
 In the ``scripts`` folder there are some script to run:
     
     ./scripts/runtests_local.sh to run the tests in the django application (if any)
+    
 
 ## Miscellanea
 
