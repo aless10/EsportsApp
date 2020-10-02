@@ -21,7 +21,7 @@ from api import urls as api_urls
 
 from rest_framework_swagger.views import get_swagger_view
 
-schema_view = get_swagger_view(title="Esports API - 0.2.0.dev")
+schema_view = get_swagger_view(title="Esports API - 0.2.0")
 
 urlpatterns = [
     url('^$', schema_view, name="swagger"),
