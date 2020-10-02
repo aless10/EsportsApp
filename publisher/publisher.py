@@ -9,7 +9,7 @@ from pika import BlockingConnection
 from pika.adapters.blocking_connection import BlockingChannel
 from pika.exceptions import AMQPConnectionError
 
-HOST = os.environ.get("RABBIT_CONTAINER", "localhost")
+RABBIT_HOST = os.environ.get("RABBIT_CONTAINER", "localhost")
 EXCHANGE = os.environ.get("EXCHANGE", "basic_exchange")
 
 logger = logging.getLogger(__name__)
@@ -26,12 +26,12 @@ def create_channel(pika_connection: BlockingConnection) -> BlockingChannel:
 
 
 if __name__ == '__main__':
-    logger.info("Creating a connection with %s", HOST)
+    logger.info("Creating a connection with %s", RABBIT_HOST)
     connected = False
-    tries = 0
-    while not connected and tries < 5:
+    tries = 1
+    while not connected and tries <= 5:
         try:
-            connection = create_connection(host=HOST)
+            connection = create_connection(host=RABBIT_HOST)
             channel = create_channel(connection)
             connected = True
         except AMQPConnectionError:
@@ -39,6 +39,7 @@ if __name__ == '__main__':
             tries += 1
             time.sleep(5)
     if not connected:
+        logger.error("THe publisher could failed to connect to rabbitmq")
         sys.exit(1)
 
     channel.exchange_declare(exchange=EXCHANGE, exchange_type='fanout')

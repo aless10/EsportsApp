@@ -50,6 +50,7 @@ services:
       dockerfile: docker/PubDockerfile
     stdin_open: true
     tty: true
+    restart: on-failure
     env_file:
       - .env
     volumes:
@@ -60,14 +61,15 @@ services:
       - app
 
   rabbitmq:
-    image: rabbitmq
+    image: rabbitmq:3-management
+    hostname: ${RABBIT_CONTAINER}
     container_name: ${CONTAINER_PREFIX}_rabbitmq
     command: rabbitmq-server
     ports:
-      - '5672:5672'
-      - '15672:15672'
+      - 5672:5672
+      - 15672:15672
     healthcheck:
       test: [ "CMD", "nc", "-z", "localhost", "5672" ]
       interval: 5s
       timeout: 15s
-      retries: 1
+      retries: 2

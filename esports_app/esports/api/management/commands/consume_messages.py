@@ -26,7 +26,11 @@ def retry(exceptions, tries=3, delay=3):
                     return f(*args, **kwargs)
                 except exceptions as e:
                     raised_exception = e
-                    logger.warning(f"{e}, Retrying in {delay} seconds...")
+                    logger.warning(
+                        "Exception %s. Retrying in %s seconds...",
+                        e,
+                        delay
+                    )
                     time.sleep(delay)
                     decr_tries -= 1
             raise raised_exception
@@ -37,12 +41,18 @@ def retry(exceptions, tries=3, delay=3):
 
 
 def callback(ch, method, properties, body):
+    print(body)
+    body = body.decode()
+    print(body)
     logger.info('Running the callback with body %s', body)
+    print(type(body))
     j_body = json.loads(body)
+    print(type(j_body))
+    print(j_body)
     data = j_body["data"]
     match_id = int(data["id"])
     state = int(data["state"])
-    date_start = int(data["date_start_text"])
+    date_start = data["date_start_text"]
     Event.objects.create(  # pylint:disable=E1101
         source=j_body["source"],
         data=data
@@ -90,7 +100,7 @@ class Command(BaseCommand):
     @retry((AMQPConnectionError,), tries=5, delay=3)
     def handle(self, *args, **options):
         connection = pika.BlockingConnection(
-            pika.ConnectionParameters(host=settings.HOST))
+            pika.ConnectionParameters(host=settings.RABBIT_HOST))
         channel = connection.channel()
         channel.exchange_declare(
             exchange=settings.EXCHANGE,
@@ -106,5 +116,4 @@ class Command(BaseCommand):
 
         channel.basic_consume(
             queue=queue_name, on_message_callback=callback, auto_ack=True)
-
         channel.start_consuming()
