@@ -2,7 +2,7 @@
 exclude =
     .git,
     __pycache__,
-    esports/esports/settings/*,
+    esports_app/esports/esports/settings/*,
     */migrations/*,
     tests_*.py,
     *_tests.py,

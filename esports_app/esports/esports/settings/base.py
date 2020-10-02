@@ -122,3 +122,7 @@ SWAGGER_SETTINGS = {
     'APIS_SORTER': 'alpha',
     'SECURITY_DEFINITIONS': None,
 }
+
+
+HOST = os.environ.get("RABBIT_CONTAINER", "localhost")
+EXCHANGE = os.environ.get("EXCHANGE", "basic_exchange")
